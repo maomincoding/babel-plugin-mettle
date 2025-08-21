@@ -1,4 +1,5 @@
-function isFirstCharUpperCase(str) {
+// The first letter of the mettle component name must be capitalized
+function isFirstUpperCase(str) {
   return /^[A-Z]/.test(str);
 }
 
@@ -7,7 +8,7 @@ module.exports = function ({ types: t }) {
     name: 'babel-plugin-mettle',
     visitor: {
       FunctionDeclaration(path) {
-        if (path.node.id && isFirstCharUpperCase(path.node.id.name)) {
+        if (path.node.id && isFirstUpperCase(path.node.id.name)) {
           const returnStatement = path.node.body.body.find((node) => t.isReturnStatement(node));
 
           if (returnStatement && returnStatement.argument) {
