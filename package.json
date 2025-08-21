@@ -1,7 +1,7 @@
 {
   "name": "babel-plugin-mettle",
   "description": "A babel plugin for mettle.js",
-  "version": "0.3.2",
+  "version": "0.3.3",
   "main": "dist/babel-plugin-mettle.js",
   "scripts": {
     "build": "microbundle src/index.js -f cjs --target node --compress --no-sourcemap"
