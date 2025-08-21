@@ -1,0 +1,35 @@
+{
+  "name": "babel-plugin-mettle",
+  "description": "",
+  "version": "0.3.1",
+  "main": "dist/babel-plugin-mettle.js",
+  "scripts": {
+    "build": "microbundle src/index.js -f cjs --target node --compress --no-sourcemap"
+  },
+  "files": [
+    "dist"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/maomincoding/babel-plugin-mettle"
+  },
+  "bugs": {
+    "url": "https://github.com/maomincoding/babel-plugin-mettle/issues"
+  },
+  "homepage": "https://github.com/maomincoding/babel-plugin-mettle#readme",
+  "keywords": [
+    "virtual dom",
+    "babel",
+    "babel plugin",
+    "babel-plugin",
+    "mettle",
+    "mettle-js",
+    "jsx",
+    "babel-plugin-mettle"
+  ],
+  "author": "maomincoding",
+  "license": "MIT",
+  "devDependencies": {
+    "microbundle": "^0.15.1"
+  }
+}

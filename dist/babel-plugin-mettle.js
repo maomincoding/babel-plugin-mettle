@@ -1,0 +1,1 @@
+module.exports=function({types:t}){return{name:"babel-plugin-mettle",visitor:{FunctionDeclaration(n){if(n.node.id&&/^[A-Z]/.test(n.node.id.name)){const e=n.node.body.body.find(n=>t.isReturnStatement(n));if(e&&e.argument){const n=t.functionExpression(null,[],t.blockStatement([t.returnStatement(e.argument)]));e.argument=n}}}}}};
