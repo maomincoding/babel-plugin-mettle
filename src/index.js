@@ -45,12 +45,38 @@ module.exports = function ({ types: t }) {
       },
       JSXExpressionContainer(path) {
         const { expression } = path.node;
+
         if (t.isIdentifier(expression)) {
           const name = expression.name;
           const binding = path.scope.getBinding(name);
-          if (binding && isSignalBinding(binding)) {
+          if ((binding && isSignalBinding(binding)) || name.endsWith('$')) {
             if (!isInsideCustomComponentAttribute(path)) {
               path.node.expression = t.memberExpression(t.identifier(name), t.identifier('value'));
+            }
+          }
+        }
+
+        // Member Expression
+        if (t.isCallExpression(expression)) {
+          if (t.isMemberExpression(expression.callee) && t.isIdentifier(expression.callee.object)) {
+            const name = expression.callee.object.name;
+            const binding = path.scope.getBinding(name);
+            if ((binding && isSignalBinding(binding)) || name.endsWith('$')) {
+              expression.callee.object = t.memberExpression(
+                expression.callee.object,
+                t.identifier('value')
+              );
+            }
+          }
+        }
+
+        // Conditional Expressions
+        if (t.isConditionalExpression(expression)) {
+          if (t.isIdentifier(expression.test)) {
+            const name = expression.test.name;
+            const binding = path.scope.getBinding(name);
+            if ((binding && isSignalBinding(binding)) || name.endsWith('$')) {
+              expression.test = t.memberExpression(expression.test, t.identifier('value'));
             }
           }
         }
