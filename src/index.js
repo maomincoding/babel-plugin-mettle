@@ -25,6 +25,26 @@ module.exports = function ({ types: t }) {
     return false;
   }
 
+  function unwrapSignalExpression(expression, path) {
+    if (t.isMemberExpression(expression)) {
+      const newObject = unwrapSignalExpression(expression.object, path);
+      if (newObject !== expression.object) {
+        return t.memberExpression(newObject, expression.property);
+      }
+      if (t.isIdentifier(expression.object)) {
+        const name = expression.object.name;
+        const binding = path.scope.getBinding(name);
+        if ((binding && isSignalBinding(binding)) || name.endsWith('$')) {
+          return t.memberExpression(
+            t.memberExpression(expression.object, t.identifier('value')),
+            expression.property
+          );
+        }
+      }
+    }
+    return expression;
+  }
+
   return {
     name: 'babel-plugin-mettle',
     visitor: {
@@ -53,6 +73,14 @@ module.exports = function ({ types: t }) {
             if (!isInsideCustomComponentAttribute(path)) {
               path.node.expression = t.memberExpression(t.identifier(name), t.identifier('value'));
             }
+          }
+        }
+
+        // Object value
+        if (t.isMemberExpression(expression)) {
+          const newExpression = unwrapSignalExpression(expression, path);
+          if (newExpression !== expression) {
+            path.node.expression = newExpression;
           }
         }
 
