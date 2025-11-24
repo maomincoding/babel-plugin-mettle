@@ -74,56 +74,6 @@ module.exports = function ({ types: t }) {
       FunctionExpression(path) {
         processFunction(path);
       },
-      // Static Node
-      JSXElement(path) {
-        let hasDynamicContent = false;
-        const openingElement = path.get('openingElement');
-
-        const hasDynamicChild = path.get('children').some((childPath) => {
-          return childPath.isJSXExpressionContainer();
-        });
-
-        const hasDynamicAttr = openingElement.get('attributes').some((attrPath) => {
-          if (attrPath.isJSXAttribute()) {
-            const value = attrPath.get('value');
-            if (!value.node) return false;
-
-            if (value.isTemplateLiteral()) {
-              return value.node.expressions.length > 0;
-            }
-
-            if (value.isJSXExpressionContainer()) {
-              const expression = value.get('expression');
-              if (
-                expression.isStringLiteral() ||
-                expression.isNumericLiteral() ||
-                expression.isBooleanLiteral()
-              ) {
-                return false;
-              }
-              return true;
-            }
-          }
-          return false;
-        });
-
-        hasDynamicContent = hasDynamicChild || hasDynamicAttr;
-
-        if (!hasDynamicContent) {
-          const hasExistingAttr = openingElement
-            .get('attributes')
-            .some(
-              (attrPath) =>
-                attrPath.isJSXAttribute() &&
-                attrPath.get('name').isJSXIdentifier({ name: '_staticFlag' })
-            );
-
-          if (!hasExistingAttr) {
-            const dynamicAttr = t.jSXAttribute(t.jSXIdentifier('_staticFlag'), null);
-            openingElement.node.attributes.push(dynamicAttr);
-          }
-        }
-      },
     },
   };
 };
