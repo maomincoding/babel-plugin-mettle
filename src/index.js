@@ -30,6 +30,12 @@ module.exports = function ({ types: t }) {
       return;
     }
 
+    if (path.isArrowFunctionExpression() && !t.isBlockStatement(path.node.body)) {
+      const returnExpr = path.node.body;
+      const blockBody = t.blockStatement([t.returnStatement(returnExpr)]);
+      path.node.body = blockBody;
+    }
+
     path.traverse({
       ReturnStatement(returnPath) {
         if (returnPath.getFunctionParent() === path && returnPath.node.argument) {
@@ -72,6 +78,9 @@ module.exports = function ({ types: t }) {
         processFunction(path);
       },
       FunctionExpression(path) {
+        processFunction(path);
+      },
+      ArrowFunctionExpression(path) {
         processFunction(path);
       },
     },
