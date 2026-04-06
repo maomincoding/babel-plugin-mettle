@@ -11,7 +11,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/maomincoding/babel-plugin-mettle"
+    "url": "git+https://github.com/maomincoding/babel-plugin-mettle.git"
   },
   "bugs": {
     "url": "https://github.com/maomincoding/babel-plugin-mettle/issues"
