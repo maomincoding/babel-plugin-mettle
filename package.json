@@ -1,7 +1,7 @@
 {
   "name": "babel-plugin-mettle",
   "description": "A babel plugin for mettle.js",
-  "version": "0.9.3",
+  "version": "1.1.0",
   "main": "dist/babel-plugin-mettle.js",
   "scripts": {
     "build": "microbundle src/index.js -f cjs --target node --compress --no-sourcemap"
@@ -29,6 +29,12 @@
   ],
   "author": "maomincoding",
   "license": "MIT",
+  "peerDependencies": {
+    "@babel/core": "^7.0.0"
+  },
+  "dependencies": {
+    "@babel/traverse": "^7.29.0"
+  },
   "devDependencies": {
     "microbundle": "^0.15.1"
   }
